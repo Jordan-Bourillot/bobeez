@@ -2166,8 +2166,15 @@ kbd {
 }
 .welcome-hero h1 {
   margin: 16px 0 8px;
-  font-size: 32px;
+  font-size: 36px;
   font-weight: 700;
+  letter-spacing: -0.5px;
+}
+.welcome-hero h1 .brand-name {
+  font-size: inherit;
+  letter-spacing: 2px;
+  font-weight: 800;
+  margin-left: 4px;
 }
 .welcome-hero p {
   color: var(--text-dim);

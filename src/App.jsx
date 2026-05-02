@@ -178,12 +178,11 @@ export default function App() {
       if (state.sidebarCollapsed) setSidebarCollapsed(true);
       if (state.infoCollapsed) setInfoCollapsed(true);
 
-      if (!state.welcomed && !state.skipWelcome) {
+      if (!state.skipWelcome) {
         setShowWelcome(true);
-      } else {
-        const start = state.lastFolder || (await window.bobeez.homeDirs()).pictures;
-        if (start) loadFolder(start);
       }
+      const start = state.lastFolder || (await window.bobeez.homeDirs()).pictures;
+      if (start) loadFolder(start);
     })();
   }, []); // eslint-disable-line
 
@@ -704,10 +703,9 @@ export default function App() {
       )}
       {showWelcome && (
         <WelcomeScreen
-          onClose={() => { setShowWelcome(false); window.bobeez.setState({ welcomed: true }); }}
+          onClose={() => setShowWelcome(false)}
           onPickFolder={async () => {
             setShowWelcome(false);
-            window.bobeez.setState({ welcomed: true });
             const p = await window.bobeez.openFolder();
             if (p) loadFolder(p);
           }}

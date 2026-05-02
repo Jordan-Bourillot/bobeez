@@ -1,6 +1,6 @@
 {
   "name": "bobeez",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Gestionnaire d'images moderne — local-first, rapide, beau.",
   "main": "electron/main.cjs",
   "type": "module",
@@ -95,11 +95,13 @@
       "perMachine": false,
       "allowElevation": false,
       "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true,
+      "createDesktopShortcut": false,
       "createStartMenuShortcut": true,
       "shortcutName": "Bobeez",
+      "include": "build/installer.nsh",
       "deleteAppDataOnUninstall": false,
-      "differentialPackage": false
+      "differentialPackage": false,
+      "warningsAsErrors": false
     },
     "mac": {
       "target": "dmg",
