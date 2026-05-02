@@ -4,10 +4,16 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 // Use the happy head-only pose so the icon stays readable at 16/24/32 px.
+// The icon is composited on a SOLID WHITE background to avoid:
+//   1. transparent teeth inside the open mouth (the white pixels were killed
+//      by the slice-mascot transparency threshold).
+//   2. taskbar showing the desktop wallpaper through the icon.
 const SRC = path.join(__dirname, '..', 'src', 'assets', 'mascot', 'happy.png');
 const OUT_DIR = path.join(__dirname, '..', 'src', 'assets');
 const ICO_OUT = path.join(OUT_DIR, 'bobeez.ico');
 const SIZES = [16, 24, 32, 48, 64, 128, 256];
+
+const WHITE = { r: 255, g: 255, b: 255, alpha: 1 };
 
 async function main() {
   // 1. Trim transparent borders so the head fills the canvas at small sizes.
@@ -19,23 +25,28 @@ async function main() {
 
   const tmpFiles = [];
   for (const size of SIZES) {
-    // Add 6% padding so the head doesn't touch the icon edges.
+    // 6% padding so the head doesn't kiss the icon edges.
     const inner = Math.round(size * 0.92);
-    const buf = await sharp(trimmed)
-      .resize(inner, inner, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
-      .extend({
-        top: Math.floor((size - inner) / 2),
-        bottom: Math.ceil((size - inner) / 2),
-        left: Math.floor((size - inner) / 2),
-        right: Math.ceil((size - inner) / 2),
-        background: { r: 0, g: 0, b: 0, alpha: 0 },
+    const innerHead = await sharp(trimmed)
+      .resize(inner, inner, { fit: 'contain', background: WHITE })
+      .toBuffer();
+
+    // Compose head onto a SOLID WHITE square of the target size.
+    const buf = await sharp({
+        create: { width: size, height: size, channels: 3, background: WHITE },
       })
+      .composite([{
+        input: innerHead,
+        top: Math.floor((size - inner) / 2),
+        left: Math.floor((size - inner) / 2),
+      }])
       .png()
       .toBuffer();
+
     const tmp = path.join(OUT_DIR, `_ico-${size}.png`);
     fs.writeFileSync(tmp, buf);
     tmpFiles.push(tmp);
-    console.log(`✓ rendered ${size}×${size}`);
+    console.log(`✓ rendered ${size}×${size} (white background, no transparency)`);
   }
 
   const icoBuf = await pngToIco(tmpFiles);
