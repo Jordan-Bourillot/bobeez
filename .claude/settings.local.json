@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm --version)",
+      "Bash(npm install *)",
+      "Bash(npx vite *)",
+      "Bash(npx electron *)",
+      "Bash(tasklist)",
+      "Bash(taskkill /PID 20292 /T /F)",
+      "PowerShell(Get-Process electron -ErrorAction SilentlyContinue)",
+      "PowerShell(Stop-Process -Force)",
+      "PowerShell(\"killed\")",
+      "PowerShell(Get-Process electron -ErrorAction SilentlyContinue | ForEach-Object { Write-Host \"Still alive: $\\($_.Id\\)\" }; Start-Sleep -Seconds 3; \"elec count: $\\(\\(Get-Process electron -ErrorAction SilentlyContinue | Measure-Object\\).Count\\)\")",
+      "PowerShell(Set-Location C:\\\\; Start-Sleep -Seconds 10; [GC]::Collect\\(\\); Start-Sleep -Seconds 2; & cmd /c \"move C:\\\\Users\\\\jorda\\\\Downloads\\\\BOBIZ C:\\\\Users\\\\jorda\\\\Downloads\\\\Bobeez 2>&1\")",
+      "Bash(node -e \"const sharp=require\\('sharp'\\);sharp\\('Logos.jpg'\\).metadata\\(\\).then\\(m=>console.log\\(JSON.stringify\\(m\\)\\)\\)\")",
+      "Bash(node scripts/slice-mascot.cjs)",
+      "Bash(node scripts/make-ico.cjs)",
+      "Bash(node -e \"const x=require\\('png-to-ico'\\); console.log\\(typeof x, Object.keys\\(x\\)\\)\")",
+      "Bash(git --version)",
+      "Bash(git init *)",
+      "Bash(git add *)"
+    ]
+  }
+}
