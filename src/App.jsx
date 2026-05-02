@@ -27,6 +27,7 @@ import { react as mascotReact } from './lib/mascotReact.js';
 import { M } from './mascot.js';
 import { toast, toastSuccess, toastError, toastInfo } from './lib/toast.js';
 import { confirm, prompt as dialogPrompt } from './lib/dialog.js';
+import { applyTheme, getCurrentTheme } from './lib/theme.js';
 
 const TABS = ['Gérer', 'Afficher', 'Éditer'];
 
@@ -177,6 +178,7 @@ export default function App() {
       if (state.sortBy) setSortBy(state.sortBy);
       if (state.sidebarCollapsed) setSidebarCollapsed(true);
       if (state.infoCollapsed) setInfoCollapsed(true);
+      if (state.theme) applyTheme(state.theme);
 
       if (!state.skipWelcome) {
         setShowWelcome(true);
@@ -491,6 +493,9 @@ export default function App() {
       { id: 'settings', label: 'Paramètres', icon: 'settings', section: 'Aide', run: () => setShowSettings(true) },
       { id: 'compare', label: `Comparer la sélection${selected.size>=2?` (${selected.size})`:''}`, icon: 'compare', section: 'Vues', hint: selected.size<2 ? 'Sélectionne 2 photos' : '', run: () => selected.size>=2 ? setCompareActive(true) : toastInfo('Sélectionne au moins 2 photos') },
       { id: 'batch-export', label: `Exporter la sélection${selected.size>0?` (${selected.size})`:''}`, icon: 'download', section: 'Édition', hint: selected.size===0 ? 'Sélectionne au moins 1 photo' : '', run: () => selected.size>0 ? setShowBatchExport(true) : toastInfo('Sélectionne au moins 1 photo') },
+      { id: 'theme-dark', label: 'Thème : Sombre', icon: 'settings', section: 'Affichage', run: () => { applyTheme('dark'); window.bobeez.setState({ theme: 'dark' }); toastInfo('Thème sombre activé'); } },
+      { id: 'theme-light', label: 'Thème : Clair', icon: 'settings', section: 'Affichage', run: () => { applyTheme('light'); window.bobeez.setState({ theme: 'light' }); toastInfo('Thème clair activé'); } },
+      { id: 'theme-auto', label: 'Thème : Auto (système)', icon: 'settings', section: 'Affichage', run: () => { applyTheme('auto'); window.bobeez.setState({ theme: 'auto' }); toastInfo('Thème auto activé'); } },
       { id: 'view-grid', label: 'Vue : Grille', icon: 'grid', section: 'Vues', run: () => { setActiveTab(0); setGridView('grid'); } },
       { id: 'view-cal', label: 'Vue : Calendrier', icon: 'history', section: 'Vues', run: () => { setActiveTab(0); setGridView('calendar'); } },
       { id: 'view-map', label: 'Vue : Carte (GPS)', icon: 'reveal', section: 'Vues', run: () => { setActiveTab(0); setGridView('map'); } },

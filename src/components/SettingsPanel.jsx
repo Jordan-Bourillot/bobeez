@@ -3,6 +3,7 @@ import Icon from './Icon.jsx';
 import { M } from '../mascot.js';
 import { toastSuccess, toastInfo, toastError } from '../lib/toast.js';
 import { useUpdateStatus } from './UpdateBanner.jsx';
+import { applyTheme, getCurrentTheme } from '../lib/theme.js';
 
 const SECTIONS = [
   { id: 'display', label: 'Affichage', icon: 'grid' },
@@ -88,6 +89,32 @@ export default function SettingsPanel({ onClose }) {
             {section === 'display' && (
               <>
                 <h3>Affichage</h3>
+                <div className="settings-block">
+                  <label className="block-label">Thème</label>
+                  <div className="theme-picker">
+                    <ThemeChoice
+                      value="dark"
+                      label="Sombre"
+                      icon="🌙"
+                      active={(state.theme || 'dark') === 'dark'}
+                      onPick={() => { applyTheme('dark'); update({ theme: 'dark' }); }}
+                    />
+                    <ThemeChoice
+                      value="light"
+                      label="Clair"
+                      icon="☀️"
+                      active={state.theme === 'light'}
+                      onPick={() => { applyTheme('light'); update({ theme: 'light' }); }}
+                    />
+                    <ThemeChoice
+                      value="auto"
+                      label="Auto (système)"
+                      icon="🖥️"
+                      active={state.theme === 'auto'}
+                      onPick={() => { applyTheme('auto'); update({ theme: 'auto' }); }}
+                    />
+                  </div>
+                </div>
                 <div className="settings-row">
                   <span>Taille des miniatures par défaut</span>
                   <input type="range" min={80} max={400} value={state.thumbSize || 180} onChange={e => update({ thumbSize: parseInt(e.target.value) })} />
@@ -219,6 +246,20 @@ export default function SettingsPanel({ onClose }) {
         </div>
       </div>
     </div>
+  );
+}
+
+function ThemeChoice({ label, icon, active, onPick }) {
+  return (
+    <button
+      type="button"
+      className={'theme-choice ' + (active ? 'active' : '')}
+      onClick={onPick}
+    >
+      <span className="theme-choice-icon">{icon}</span>
+      <span className="theme-choice-label">{label}</span>
+      {active && <Icon name="check" size={14} className="theme-choice-check" />}
+    </button>
   );
 }
 

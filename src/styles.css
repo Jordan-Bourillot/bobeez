@@ -1,5 +1,5 @@
 /* ============================================================
-   BOBEEZ — design tokens
+   BOBEEZ — design tokens (dark by default)
    ============================================================ */
 :root {
   --bg: #0b0d11;
@@ -24,12 +24,73 @@
   --shadow-sm: 0 2px 6px rgba(0,0,0,.25);
   --shadow: 0 8px 24px rgba(0,0,0,.4);
   --shadow-lg: 0 24px 64px rgba(0,0,0,.6);
+  --check-bg-1: #0a0c10;
+  --check-bg-2: #0f1115;
   --radius: 10px;
   --radius-sm: 6px;
   --radius-lg: 14px;
   --t-fast: .12s cubic-bezier(.4,0,.2,1);
   --t: .18s cubic-bezier(.4,0,.2,1);
   --t-slow: .36s cubic-bezier(.4,0,.2,1);
+}
+
+/* ============================================================
+   Light theme override
+   ============================================================ */
+:root[data-theme="light"] {
+  --bg: #fafbfc;
+  --bg-1: #ffffff;
+  --bg-2: #f1f3f6;
+  --bg-3: #e3e7ed;
+  --bg-4: #cfd5df;
+  --border: #e3e7ed;
+  --border-strong: #c7cdd7;
+  --text: #1a1f2e;
+  --text-dim: #4b5563;
+  --text-mute: #8b94a3;
+  --accent: #ff5722;
+  --accent-2: #ff8a3d;
+  --accent-soft: rgba(255, 87, 34, 0.10);
+  --accent-glow: 0 0 0 3px rgba(255, 87, 34, 0.20);
+  --info: #2563eb;
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, .08);
+  --shadow: 0 6px 20px rgba(15, 23, 42, .10);
+  --shadow-lg: 0 18px 48px rgba(15, 23, 42, .18);
+  --check-bg-1: #f0f2f5;
+  --check-bg-2: #e6e9ee;
+}
+
+/* Auto mode: follow system preference */
+@media (prefers-color-scheme: light) {
+  :root[data-theme="auto"] {
+    --bg: #fafbfc;
+    --bg-1: #ffffff;
+    --bg-2: #f1f3f6;
+    --bg-3: #e3e7ed;
+    --bg-4: #cfd5df;
+    --border: #e3e7ed;
+    --border-strong: #c7cdd7;
+    --text: #1a1f2e;
+    --text-dim: #4b5563;
+    --text-mute: #8b94a3;
+    --accent: #ff5722;
+    --accent-2: #ff8a3d;
+    --accent-soft: rgba(255, 87, 34, 0.10);
+    --accent-glow: 0 0 0 3px rgba(255, 87, 34, 0.20);
+    --info: #2563eb;
+    --shadow-sm: 0 1px 3px rgba(15, 23, 42, .08);
+    --shadow: 0 6px 20px rgba(15, 23, 42, .10);
+    --shadow-lg: 0 18px 48px rgba(15, 23, 42, .18);
+    --check-bg-1: #f0f2f5;
+    --check-bg-2: #e6e9ee;
+  }
+}
+
+/* Smooth transition when switching themes */
+html, body, .app, .toolbar, .sidebar, .info-panel, .center, .grid, .modal,
+.cmdk, .ctx-menu, .toast, .settings-modal, .help-modal, .welcome,
+.update-banner, .beta-banner, .statusbar {
+  transition: background-color var(--t), color var(--t), border-color var(--t);
 }
 
 /* ============================================================
@@ -763,7 +824,7 @@ kbd {
   justify-content: center;
   position: relative;
   background:
-    repeating-conic-gradient(#0a0c10 0% 25%, #0f1115 0% 50%) 50% / 24px 24px;
+    repeating-conic-gradient(var(--check-bg-1) 0% 25%, var(--check-bg-2) 0% 50%) 50% / 24px 24px;
 }
 .viewer-stage img {
   max-width: 100%;
@@ -814,7 +875,7 @@ kbd {
   align-items: center;
   justify-content: center;
   padding: 16px;
-  background: repeating-conic-gradient(#0a0c10 0% 25%, #0f1115 0% 50%) 50% / 24px 24px;
+  background: repeating-conic-gradient(var(--check-bg-1) 0% 25%, var(--check-bg-2) 0% 50%) 50% / 24px 24px;
   overflow: hidden;
 }
 .editor-stage img {
@@ -2573,6 +2634,59 @@ kbd {
   display: flex;
   gap: 8px;
   margin-top: 12px;
+}
+
+.settings-block {
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.block-label {
+  display: block;
+  font-size: 12px;
+  color: var(--text-dim);
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+.theme-picker {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.theme-choice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: var(--bg-2);
+  border: 2px solid var(--border);
+  padding: 14px 8px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all var(--t-fast);
+  position: relative;
+}
+.theme-choice:hover {
+  background: var(--bg-3);
+  border-color: var(--border-strong);
+}
+.theme-choice.active {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+.theme-choice-icon { font-size: 24px; line-height: 1; }
+.theme-choice-label {
+  font-size: 11.5px;
+  color: var(--text);
+  font-weight: 500;
+}
+.theme-choice.active .theme-choice-label { color: var(--accent); }
+.theme-choice-check {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  color: var(--accent);
 }
 
 .settings-toggle {
