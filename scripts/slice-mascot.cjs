@@ -20,18 +20,46 @@ const NAMES = [
 ];
 
 async function makeTransparent(input, outPath) {
-  // 1. Load image, ensure RGBA, threshold near-white pixels to transparent.
+  // Flood-fill from the borders: only background pixels CONNECTED to the
+  // outer edge become transparent. Internal whites (teeth, eye highlights)
+  // surrounded by darker outlines stay opaque.
+  const THRESHOLD = 235;  // a pixel is "background" if R, G, B all >= threshold
   const img = sharp(input).ensureAlpha();
   const { data, info } = await img.raw().toBuffer({ resolveWithObject: true });
-  const out = Buffer.alloc(data.length);
-  data.copy(out);
-  for (let i = 0; i < out.length; i += 4) {
-    const r = out[i], g = out[i + 1], b = out[i + 2];
-    if (r > 240 && g > 240 && b > 240) {
-      out[i + 3] = 0;
-    }
+  const w = info.width;
+  const h = info.height;
+  const out = Buffer.from(data);
+  const visited = new Uint8Array(w * h);
+  const stack = [];
+
+  const isBg = (bi) => out[bi] >= THRESHOLD && out[bi + 1] >= THRESHOLD && out[bi + 2] >= THRESHOLD;
+  const seed = (x, y) => {
+    if (x < 0 || y < 0 || x >= w || y >= h) return;
+    const i = y * w + x;
+    if (visited[i]) return;
+    const bi = i * 4;
+    if (!isBg(bi)) return;
+    visited[i] = 1;
+    stack.push(i);
+  };
+
+  // Seed from all border pixels (handles backgrounds that aren't perfectly
+  // square — i.e. mascot touches one edge but not others).
+  for (let x = 0; x < w; x++) { seed(x, 0); seed(x, h - 1); }
+  for (let y = 0; y < h; y++) { seed(0, y); seed(w - 1, y); }
+
+  while (stack.length) {
+    const i = stack.pop();
+    out[i * 4 + 3] = 0;  // make transparent
+    const x = i % w;
+    const y = (i / w) | 0;
+    seed(x + 1, y);
+    seed(x - 1, y);
+    seed(x, y + 1);
+    seed(x, y - 1);
   }
-  await sharp(out, { raw: { width: info.width, height: info.height, channels: 4 } })
+
+  await sharp(out, { raw: { width: w, height: h, channels: 4 } })
     .png({ compressionLevel: 9 })
     .toFile(outPath);
 }
