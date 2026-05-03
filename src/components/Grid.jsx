@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { M } from '../mascot.js';
 import Icon from './Icon.jsx';
-import FlyingMascot from './FlyingMascot.jsx';
 
 function Thumb({ file, idx, size, selected, onClick, onDoubleClick, onSetRating, onContextMenu, onHover, onLeave }) {
   const [src, setSrc] = useState(null);
@@ -92,12 +91,9 @@ export default function Grid({ files, selected, onSelect, onOpen, thumbSize, loa
     </div>
   );
   if (!files.length) return (
-    <div className="empty empty-flying">
-      <FlyingMascot pose="happy" />
-      <div className="empty-text">
-        <h3>Aucune image ici</h3>
-        <p>Ouvre un autre dossier ou dépose-le dans la fenêtre.</p>
-      </div>
+    <div className="empty mascot-empty">
+      <h3>Aucune image ici</h3>
+      <p>Ouvre un autre dossier ou dépose-le dans la fenêtre.</p>
     </div>
   );
 

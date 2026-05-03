@@ -13,6 +13,7 @@ import HelpOverlay from './components/HelpOverlay.jsx';
 import CommandPalette from './components/CommandPalette.jsx';
 import TriageMode from './components/TriageMode.jsx';
 import HoverPreview from './components/HoverPreview.jsx';
+import FlyingMascot from './components/FlyingMascot.jsx';
 import UpdateBanner from './components/UpdateBanner.jsx';
 import BetaBanner from './components/BetaBanner.jsx';
 import CompareMode from './components/CompareMode.jsx';
@@ -580,6 +581,7 @@ export default function App() {
         )}
 
         <section className="center">
+          <FlyingMascot pose="base" />
           {activeTab === 0 && (
             <>
               <div className="view-switcher">

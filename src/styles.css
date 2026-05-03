@@ -517,6 +517,7 @@ kbd {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  position: relative;  /* anchor for the flying mascot */
 }
 .info-panel {
   background: var(--bg-1);
@@ -751,27 +752,33 @@ kbd {
   inset: 0;
   pointer-events: none;
   overflow: hidden;
-  z-index: 1;
+  z-index: 0;
 }
 .fm-orbit {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 90px;
-  height: 90px;
-  margin-left: -45px;
-  margin-top: -45px;
-  animation: fm-wander 28s ease-in-out infinite;
+  width: 120px;
+  height: 120px;
+  margin-left: -60px;
+  margin-top: -60px;
+  animation: fm-wander 32s ease-in-out infinite;
   will-change: transform;
 }
 .fm-img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  animation: fm-wobble 4.6s ease-in-out infinite;
-  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, .35));
-  opacity: .92;
+  animation: fm-wobble 5s ease-in-out infinite;
+  filter: drop-shadow(0 6px 18px rgba(0, 0, 0, .4));
+  opacity: .55;
   will-change: transform;
+}
+/* Ensure photos / views render above the flying mascot */
+.grid, .viewer, .editor, .calendar-view, .map-view, .view-switcher,
+.empty {
+  position: relative;
+  z-index: 1;
 }
 @keyframes fm-wander {
   0%   { transform: translate(-32vw, -22vh); }

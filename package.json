@@ -1,6 +1,6 @@
 {
   "name": "bobeez",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Gestionnaire d'images moderne — local-first, rapide, beau.",
   "main": "electron/main.cjs",
   "type": "module",
