@@ -1,0 +1,27 @@
+# ===== Node / Netlify =====
+node_modules/
+.netlify/
+landing/node_modules/
+landing/.netlify/
+
+# ===== Distributables / private payloads =====
+landing/private/
+
+# ===== Secrets =====
+.env
+.env.local
+.env.*.local
+landing/.env
+landing/.env.local
+
+# ===== IDE / OS =====
+.vscode/
+.idea/
+desktop.ini
+Thumbs.db
+.DS_Store
+
+# ===== Logs =====
+*.log
+*.tmp
+.cache/
