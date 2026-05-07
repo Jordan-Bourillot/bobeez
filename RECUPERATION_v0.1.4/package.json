@@ -1,0 +1,115 @@
+{
+  "name": "bobeez",
+  "version": "0.1.4",
+  "description": "Gestionnaire d'images moderne — local-first, rapide, beau.",
+  "main": "electron/main.cjs",
+  "type": "module",
+  "author": {
+    "name": "Triskell Studio",
+    "email": "contact@triskell-studio.fr"
+  },
+  "scripts": {
+    "dev:vite": "vite",
+    "dev:electron": "wait-on http://localhost:5173 && cross-env BOBEEZ_DEV=1 electron .",
+    "dev": "concurrently -k \"npm:dev:vite\" \"npm:dev:electron\"",
+    "build:vite": "vite build",
+    "icon": "node scripts/make-ico.cjs",
+    "package": "npm run build:vite && electron-builder --dir",
+    "dist": "npm run icon && npm run build:vite && electron-builder",
+    "dist:portable": "npm run icon && npm run build:vite && electron-builder --win zip",
+    "dist:publish": "npm run icon && npm run build:vite && electron-builder --publish always",
+    "start": "electron ."
+  },
+  "dependencies": {
+    "electron-updater": "^6.8.3",
+    "exifr": "^7.1.3",
+    "png-to-ico": "^3.0.1",
+    "sharp": "^0.33.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.1.2",
+    "cross-env": "^7.0.3",
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "vite": "^6.0.5",
+    "wait-on": "^8.0.1"
+  },
+  "build": {
+    "appId": "com.bobeez.app",
+    "productName": "Bobeez",
+    "copyright": "Copyright © 2026 Bobeez",
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "Jordan-Bourillot",
+        "repo": "bobeez",
+        "private": false,
+        "releaseType": "release"
+      }
+    ],
+    "files": [
+      "electron/**/*",
+      "dist/**/*",
+      "src/assets/bobeez.ico",
+      "src/assets/mascot/logo.png"
+    ],
+    "extraResources": [
+      {
+        "from": "src/assets/bobeez.ico",
+        "to": "icon.ico"
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "src/assets/bobeez.ico",
+      "publisherName": "Bobeez",
+      "verifyUpdateCodeSignature": false,
+      "signtoolOptions": {
+        "sign": null
+      }
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": false,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Bobeez",
+      "include": "build/installer.nsh",
+      "deleteAppDataOnUninstall": false,
+      "differentialPackage": false,
+      "warningsAsErrors": false
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "src/assets/mascot/logo.png"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "src/assets/mascot/logo.png"
+    }
+  }
+}
